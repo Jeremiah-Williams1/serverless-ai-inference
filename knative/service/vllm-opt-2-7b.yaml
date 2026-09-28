@@ -1,0 +1,46 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: vllm-opt-2-7b
+  namespace: default
+spec:
+  template:
+    spec:
+      # Knative default is 300s, capped by max-revision-timeout-seconds (600s).
+      # opt-2.7b's download+load should clear 300s comfortably, but setting
+      # it explicitly and near the ceiling so a slow first pull doesn't
+      # silently fail the request instead of just being slow.
+      timeoutSeconds: 600
+      containers:
+        - image: vllm/vllm-openai:latest
+          ports:
+            - containerPort: 8000
+          args:
+            - "--model"
+            - "facebook/opt-2.7b"
+            - "--dtype"
+            - "float16"
+            - "--gpu-memory-utilization"
+            - "0.85"
+            - "--max-model-len"
+            - "2048"
+            - "--port"
+            - "8000"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: "10Gi"
+              ephemeral-storage: "15Gi"
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "4"
+              memory: "14Gi"
+              ephemeral-storage: "20Gi"
+              nvidia.com/gpu: "1"
