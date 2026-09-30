@@ -45,11 +45,29 @@ wait_for_zero() {
 }
 
 send_timed_request() {
+  local tmpfile
+  tmpfile=$(mktemp)
   curl -s -o /dev/null --max-time "$MAX_TIME_PER_REQUEST" \
     -H "Host: ${HOST_HEADER}" -H "Content-Type: application/json" \
-    -w "%{time_connect} %{time_starttransfer} %{time_total} %{http_code}" \
+    -w "%{time_connect} %{time_starttransfer} %{time_total} %{http_code}\n" \
     "$URL" \
-    -d "{\"model\": \"facebook/opt-2.7b\", \"prompt\": \"${PROMPT}\", \"max_tokens\": 30, \"temperature\": 0.8}"
+    -d "{\"model\": \"facebook/opt-2.7b\", \"prompt\": \"${PROMPT}\", \"max_tokens\": 30, \"temperature\": 0.8}" \
+    > "$tmpfile" &
+  local curl_pid=$!
+
+  echo "  (request sent — a cold start can take 1-3+ min; do NOT interrupt, polling every 10s)" >&2
+  local waited=0
+  while kill -0 "$curl_pid" 2>/dev/null; do
+    sleep 10
+    waited=$((waited + 10))
+    local pod_status
+    pod_status=$(kubectl get pods -l serving.knative.dev/service="$SERVICE_NAME" -n "$NAMESPACE" \
+      --no-headers 2>/dev/null | awk '{print $2}' | head -1)
+    echo "    ...still waiting (${waited}s) — pod READY column: ${pod_status:-no pod yet}" >&2
+  done
+  wait "$curl_pid"
+  cat "$tmpfile"
+  rm -f "$tmpfile"
 }
 
 {
