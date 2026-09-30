@@ -15,6 +15,9 @@ spec:
         - image: vllm/vllm-openai:latest
           ports:
             - containerPort: 8000
+          env:
+            - name: VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS
+              value: "0"
           args:
             - "--model"
             - "facebook/opt-2.7b"
