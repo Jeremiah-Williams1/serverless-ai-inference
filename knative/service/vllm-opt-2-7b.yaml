@@ -6,13 +6,10 @@ metadata:
 spec:
   template:
     spec:
-      # Knative default is 300s, capped by max-revision-timeout-seconds (600s).
-      # opt-2.7b's download+load should clear 300s comfortably, but setting
-      # it explicitly and near the ceiling so a slow first pull doesn't
-      # silently fail the request instead of just being slow.
       timeoutSeconds: 600
       containers:
-        - image: vllm/vllm-openai:latest
+        - image: dev.local/vllm-opt-2-7b-baked:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8000
           env:

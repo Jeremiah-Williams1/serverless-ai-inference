@@ -1,0 +1,26 @@
+=== vLLM cold-start benchmark — 2026-09-30_22-51-31 ===
+Service: vllm-opt-2-7b
+
+-- Waiting for scale-to-zero --
+Currently 1 pod(s) running. Waiting for scale-to-zero (stop sending other traffic now)...
+  still running... (10s idle so far)
+  still running... (20s idle so far)
+  still running... (30s idle so far)
+  still running... (40s idle so far)
+Confirmed 0 pods after ~40s idle.
+
+-- Sending COLD request --
+  time_connect:       0.000159s
+  time_starttransfer: 159.758590s   <-- the cold-start number
+  time_total:         159.758632s
+  http_status:        200
+
+-- Sending 3 WARM requests --
+  [1] time_starttransfer: 0.706092s   time_total: 0.706137s   http_status: 200
+  [2] time_starttransfer: 0.705851s   time_total: 0.705897s   http_status: 200
+  [3] time_starttransfer: 0.704979s   time_total: 0.705038s   http_status: 200
+
+-- Summary --
+  Cold time_starttransfer: 159.758590s
+  Warm avg time_starttransfer (n=3): 0.7056s
+  Cold is ~226.4x slower than warm
