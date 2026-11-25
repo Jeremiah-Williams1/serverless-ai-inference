@@ -21,7 +21,7 @@ fi
 
 echo
 echo "== Gate 3 (0c): GPU through k3s containerd =="
-grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml \
+sudo grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml \
   || { echo "FAIL: k3s did not detect the NVIDIA runtime (try: sudo systemctl restart k3s)"; exit 1; }
 
 if ! kubectl get runtimeclass nvidia >/dev/null 2>&1; then
