@@ -1,0 +1,51 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: vllm-b
+  namespace: default
+spec:
+  template:
+    spec:
+      timeoutSeconds: 600
+      runtimeClassName: nvidia
+      containers:
+        - image: __REG__/serverless-ai/vllm-baked:opt-2.7b-905a4b6
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS
+              value: "0"
+            - name: HF_HUB_OFFLINE
+              value: "1"
+          args:
+            - "--model"
+            - "facebook/opt-2.7b"
+            - "--revision"
+            - "__REV__"
+            - "--dtype"
+            - "float16"
+            - "--gpu-memory-utilization"
+            - "0.85"
+            - "--max-model-len"
+            - "2048"
+            - "--port"
+            - "8000"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: "10Gi"
+              ephemeral-storage: "15Gi"
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "4"
+              memory: "14Gi"
+              ephemeral-storage: "20Gi"
+              nvidia.com/gpu: "1"

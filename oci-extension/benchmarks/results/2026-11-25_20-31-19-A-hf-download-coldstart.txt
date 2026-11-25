@@ -1,4 +1,0 @@
-=== vLLM cold-start benchmark — 2026-11-25_20-31-19 ===
-Service: vllm-a,
-
--- Waiting for scale-to-zero --
