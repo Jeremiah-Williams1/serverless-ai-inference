@@ -1,0 +1,33 @@
+=== A-hf-download cold-start benchmark: 2026-11-25_21-35-32 ===
+Service: vllm-a
+
+-- Waiting for scale-to-zero --
+Already at 0 pods.
+
+-- Sending COLD request --
+  time_connect:       0.000243s
+  time_starttransfer: 123.604596s   <-- the cold-start number
+  time_total:         123.606594s
+  http_status:        200
+
+-- Sending 3 WARM requests --
+  [1] time_starttransfer: 0.717335s   time_total: 0.717380s   http_status: 200
+  [2] time_starttransfer: 0.717274s   time_total: 0.717330s   http_status: 200
+  [3] time_starttransfer: 0.716581s   time_total: 0.716623s   http_status: 200
+
+-- Evidence from the pod (still alive right now) --
+HF cache size inside the pod:
+5.0G	/root/.cache/huggingface
+total 0
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 README.md -> ../../blobs/5e73eb888999bc36851fdcc336703126e55484c0
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 config.json -> ../../blobs/02bc707d06e86e9aebea913895b6d0a61627d063
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 generation_config.json -> ../../blobs/cf739e3ba86db7791ebab2828cc34b8a5acd3a86
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 merges.txt -> ../../blobs/226b0752cac7789c48f0cb3ec53eda48b7be36cc
+lrwxrwxrwx. 1 root root 76 Nov 25 21:36 pytorch_model.bin -> ../../blobs/476391562b9b2635c672d15bd69cfa881c5c824ebe89b00fee6c58947541e6e4
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 special_tokens_map.json -> ../../blobs/5dfa36546b8eddce0e04df3133c30df43fcc3828
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 tokenizer_config.json -> ../../blobs/27c24ca9d908d0b678b20c698aeb9e950c44d865
+lrwxrwxrwx. 1 root root 52 Nov 25 21:35 vocab.json -> ../../blobs/0a39732b2d8be8e493cab3da68b68cc3e28221de
+
+-- Summary --
+  Cold time_starttransfer: 123.604596s
+  Warm avg (n=3): 0.7171s

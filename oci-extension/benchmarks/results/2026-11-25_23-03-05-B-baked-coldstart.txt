@@ -1,0 +1,32 @@
+=== B-baked cold-start benchmark: 2026-11-25_23-03-05 ===
+Service: vllm-b
+
+-- Waiting for scale-to-zero --
+Already at 0 pods.
+
+-- Sending COLD request --
+  time_connect:       0.000231s
+  time_starttransfer: 97.678362s   <-- the cold-start number
+  time_total:         97.678407s
+  http_status:        200
+
+-- Sending 3 WARM requests --
+  [1] time_starttransfer: 0.716880s   time_total: 0.716926s   http_status: 200
+  [2] time_starttransfer: 0.716035s   time_total: 0.716091s   http_status: 200
+  [3] time_starttransfer: 0.716154s   time_total: 0.716198s   http_status: 200
+
+-- Evidence from the pod (still alive right now) --
+HF cache size inside the pod:
+5.0G	/root/.cache/huggingface
+total 0
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 config.json -> ../../blobs/02bc707d06e86e9aebea913895b6d0a61627d063
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 generation_config.json -> ../../blobs/cf739e3ba86db7791ebab2828cc34b8a5acd3a86
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 merges.txt -> ../../blobs/226b0752cac7789c48f0cb3ec53eda48b7be36cc
+lrwxrwxrwx. 1 root root 76 Nov 25 21:51 pytorch_model.bin -> ../../blobs/476391562b9b2635c672d15bd69cfa881c5c824ebe89b00fee6c58947541e6e4
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 special_tokens_map.json -> ../../blobs/5dfa36546b8eddce0e04df3133c30df43fcc3828
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 tokenizer_config.json -> ../../blobs/27c24ca9d908d0b678b20c698aeb9e950c44d865
+lrwxrwxrwx. 1 root root 52 Nov 25 21:51 vocab.json -> ../../blobs/0a39732b2d8be8e493cab3da68b68cc3e28221de
+
+-- Summary --
+  Cold time_starttransfer: 97.678362s
+  Warm avg (n=3): 0.7164s
