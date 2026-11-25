@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SERVICE_NAME="${1:?usage: $0 <service> <label>}", 
-LABEL="${2:?usage: $0 <service> <label>}"
-MODEL_NAME="${MODEL_NAME:-facebook/opt-2.7b}"
+SERVICE_NAME="vllm-opt-2-7b"
 NAMESPACE="default"
 HOST_HEADER="${SERVICE_NAME}.${NAMESPACE}.example.com"
 WARM_REQUESTS=3
@@ -12,16 +10,14 @@ MAX_TIME_PER_REQUEST=600  # curl --max-time; matches the ksvc's timeoutSeconds
 
 PROMPT="The data center was silent at 3am, every GPU idle, until the first request of the day arrived and"
 
-# MINIKUBE_IP=$(minikube ip)
+MINIKUBE_IP=$(minikube ip)
 NODEPORT=$(kubectl get svc kourier -n kourier-system -o jsonpath='{.spec.ports[?(@.port==80)].nodePort}')
-# URL="http://${MINIKUBE_IP}:${NODEPORT}/v1/completions"
-URL="http://localhost:${NODEPORT}/v1/completions"
+URL="http://${MINIKUBE_IP}:${NODEPORT}/v1/completions"
 
-# RESULTS_DIR="benchmarks/results"
-RESULTS_DIR="oci-extension/benchmarks/results"
+RESULTS_DIR="benchmarks/results"
 mkdir -p "$RESULTS_DIR"
 TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-RESULTS_FILE="${RESULTS_DIR}/${TIMESTAMP}-${LABEL}-coldstart.txt"
+RESULTS_FILE="${RESULTS_DIR}/${TIMESTAMP}-vllm-coldstart.txt"
 
 pod_count() {
   kubectl get pods -l serving.knative.dev/service="$SERVICE_NAME" -n "$NAMESPACE" --no-headers 2>/dev/null | wc -l
@@ -55,7 +51,7 @@ send_timed_request() {
     -H "Host: ${HOST_HEADER}" -H "Content-Type: application/json" \
     -w "%{time_connect} %{time_starttransfer} %{time_total} %{http_code}\n" \
     "$URL" \
-    -d "{\"model\": \"${MODEL_NAME}\", \"prompt\": \"${PROMPT}\", \"max_tokens\": 30, \"temperature\": 0.8}" \
+    -d "{\"model\": \"facebook/opt-2.7b\", \"prompt\": \"${PROMPT}\", \"max_tokens\": 30, \"temperature\": 0.8}" \
     > "$tmpfile" &
   local curl_pid=$!
 
