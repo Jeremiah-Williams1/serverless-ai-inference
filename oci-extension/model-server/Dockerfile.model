@@ -1,0 +1,8 @@
+ARG BASE
+FROM ${BASE} AS fetch
+ARG REV
+RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='facebook/opt-2.7b', revision='${REV}', local_dir='/model', allow_patterns=['*.json','*.txt','*.md','pytorch_model.bin'])" \
+ && rm -rf /model/.cache
+
+FROM scratch
+COPY --from=fetch /model /
