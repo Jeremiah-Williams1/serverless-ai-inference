@@ -1,0 +1,145 @@
+Name:                vllm-c-00001-deployment-854857dbd7-qfxgc
+Namespace:           default
+Priority:            0
+Runtime Class Name:  nvidia
+Service Account:     default
+Node:                ip-172-31-1-221.ec2.internal/172.31.1.221
+Start Time:          Thu, 26 Nov 2026 23:10:57 +0000
+Labels:              app=vllm-c-00001
+                     pod-template-hash=854857dbd7
+                     serving.knative.dev/configuration=vllm-c
+                     serving.knative.dev/configurationGeneration=1
+                     serving.knative.dev/configurationUID=d715cdb8-5fb2-4533-8fa4-8965a83dae4f
+                     serving.knative.dev/revision=vllm-c-00001
+                     serving.knative.dev/revisionUID=aae7dfca-4d7b-4edf-9158-b0243d629149
+                     serving.knative.dev/service=vllm-c
+                     serving.knative.dev/serviceUID=38ef377d-e790-422d-8a5b-68e6f1f13596
+Annotations:         kubectl.kubernetes.io/default-container: user-container
+                     serving.knative.dev/creator: system:admin
+Status:              Running
+IP:                  10.42.0.72
+IPs:
+  IP:           10.42.0.72
+Controlled By:  ReplicaSet/vllm-c-00001-deployment-854857dbd7
+Containers:
+  user-container:
+    Container ID:  containerd://41ac451b8800ccb89eae7deac27e6e93978575dd8d5dbdbb2b92d1ff4e3dd17c
+    Image:         755199213482.dkr.ecr.us-east-1.amazonaws.com/serverless-ai/vllm-runtime:base
+    Image ID:      755199213482.dkr.ecr.us-east-1.amazonaws.com/serverless-ai/vllm-runtime@sha256:cf5b2fdd087eb4f6d261736967cc5cde974bd22ff4df50365f8fa419b6b4c484
+    Port:          8000/TCP (user-port)
+    Host Port:     0/TCP (user-port)
+    Args:
+      --model
+      /mnt/models
+      --served-model-name
+      facebook/opt-2.7b
+      --dtype
+      float16
+      --gpu-memory-utilization
+      0.85
+      --max-model-len
+      2048
+      --port
+      8000
+    State:          Running
+      Started:      Thu, 26 Nov 2026 23:10:58 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:                4
+      ephemeral-storage:  20Gi
+      memory:             14Gi
+      nvidia.com/gpu:     1
+    Requests:
+      cpu:                2
+      ephemeral-storage:  15Gi
+      memory:             10Gi
+      nvidia.com/gpu:     1
+    Environment:
+      VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS:  0
+      HF_HUB_OFFLINE:                            1
+      PORT:                                      8000
+      K_REVISION:                                vllm-c-00001
+      K_CONFIGURATION:                           vllm-c
+      K_SERVICE:                                 vllm-c
+    Mounts:
+      /mnt/models from model (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d2dcq (ro)
+  queue-proxy:
+    Container ID:    containerd://dc2bc838eeb9720be527d686cd73826257ed7f684bbb3649123a669b392981ae
+    Image:           gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:a3cc71ce80dbc6df8781f15eac2cf3531a4c9815271799afd8776bef9e6aeaf2
+    Image ID:        gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:a3cc71ce80dbc6df8781f15eac2cf3531a4c9815271799afd8776bef9e6aeaf2
+    Ports:           9090/TCP (http-autometric), 9091/TCP (http-usermetric), 8012/TCP (queue-port), 8112/TCP (https-port)
+    Host Ports:      0/TCP (http-autometric), 0/TCP (http-usermetric), 0/TCP (queue-port), 0/TCP (https-port)
+    SeccompProfile:  RuntimeDefault
+    State:           Running
+      Started:       Thu, 26 Nov 2026 23:10:58 +0000
+    Ready:           True
+    Restart Count:   0
+    Requests:
+      cpu:      25m
+    Readiness:  http-get http://:8012/ delay=15s timeout=1s period=10s successThreshold=1 failureThreshold=30
+    Environment:
+      SERVING_NAMESPACE:                        default
+      SERVING_SERVICE:                          vllm-c
+      SERVING_CONFIGURATION:                    vllm-c
+      SERVING_REVISION:                         vllm-c-00001
+      QUEUE_SERVING_PORT:                       8012
+      QUEUE_SERVING_TLS_PORT:                   8112
+      CONTAINER_CONCURRENCY:                    0
+      REVISION_TIMEOUT_SECONDS:                 600
+      REVISION_RESPONSE_START_TIMEOUT_SECONDS:  300
+      REVISION_IDLE_TIMEOUT_SECONDS:            0
+      SERVING_POD:                              vllm-c-00001-deployment-854857dbd7-qfxgc (v1:metadata.name)
+      SERVING_POD_IP:                            (v1:status.podIP)
+      SERVING_LOGGING_CONFIG:                   
+      SERVING_LOGGING_LEVEL:                    
+      USER_PORT:                                8000
+      SYSTEM_NAMESPACE:                         knative-serving
+      SERVING_READINESS_PROBE:                  {"httpGet":{"path":"/health","port":8000,"host":"127.0.0.1","scheme":"HTTP"},"initialDelaySeconds":15,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":30}
+      HOST_IP:                                   (v1:status.hostIP)
+      ENABLE_HTTP2_AUTO_DETECTION:              false
+      ENABLE_HTTP_FULL_DUPLEX:                  false
+      ROOT_CA:                                  
+      QUEUE_PROXY_TLS_MIN_VERSION:              
+      QUEUE_PROXY_TLS_MAX_VERSION:              
+      QUEUE_PROXY_TLS_CIPHER_SUITES:            
+      QUEUE_PROXY_TLS_CURVE_PREFERENCES:        
+      ENABLE_MULTI_CONTAINER_PROBES:            false
+      OBSERVABILITY_CONFIG:                     {"tracing":{"protocol":"none"},"metrics":{"protocol":"none"},"runtime":{"profiling":"disabled","exportInterval":15000000000},"requestMetrics":{"protocol":"none"},"requestLogTemplate":"{\"httpRequest\": {\"requestMethod\": \"{{.Request.Method}}\", \"requestUrl\": \"{{js .Request.RequestURI}}\", \"requestSize\": \"{{.Request.ContentLength}}\", \"status\": {{.Response.Code}}, \"responseSize\": \"{{.Response.Size}}\", \"userAgent\": \"{{js .Request.UserAgent}}\", \"remoteIp\": \"{{js .Request.RemoteAddr}}\", \"serverIp\": \"{{.Revision.PodIP}}\", \"referer\": \"{{js .Request.Referer}}\", \"latency\": \"{{.Response.Latency}}s\", \"protocol\": \"{{.Request.Proto}}\"}, \"traceId\": \"{{.TraceID}}\"}"}
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d2dcq (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  model:
+    Type:        Image (a container image or OCI artifact)
+    Reference:   755199213482.dkr.ecr.us-east-1.amazonaws.com/serverless-ai/model-opt-2-7b@sha256:69cb3a52afbe866c4980f45cc2d5672f3bc8677665532ab346dd1c49dd54eef3
+    PullPolicy:  IfNotPresent
+  kube-api-access-d2dcq:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  2m11s               default-scheduler  Successfully assigned default/vllm-c-00001-deployment-854857dbd7-qfxgc to ip-172-31-1-221.ec2.internal
+  Normal   Pulled     2m11s               kubelet            Container image "755199213482.dkr.ecr.us-east-1.amazonaws.com/serverless-ai/model-opt-2-7b@sha256:69cb3a52afbe866c4980f45cc2d5672f3bc8677665532ab346dd1c49dd54eef3" already present on machine and can be accessed by the pod
+  Normal   Pulled     2m11s               kubelet            spec.containers{user-container}: Container image "755199213482.dkr.ecr.us-east-1.amazonaws.com/serverless-ai/vllm-runtime:base" already present on machine and can be accessed by the pod
+  Normal   Created    2m11s               kubelet            spec.containers{user-container}: Container created
+  Normal   Started    2m11s               kubelet            spec.containers{user-container}: Container started
+  Normal   Pulled     2m11s               kubelet            spec.containers{queue-proxy}: Container image "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:a3cc71ce80dbc6df8781f15eac2cf3531a4c9815271799afd8776bef9e6aeaf2" already present on machine and can be accessed by the pod
+  Normal   Created    2m11s               kubelet            spec.containers{queue-proxy}: Container created
+  Normal   Started    2m11s               kubelet            spec.containers{queue-proxy}: Container started
+  Warning  Unhealthy  44s (x8 over 110s)  kubelet            spec.containers{queue-proxy}: Readiness probe failed: HTTP probe failed with statuscode: 503

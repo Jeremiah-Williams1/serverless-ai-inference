@@ -1,0 +1,23 @@
+=== C-uncached cold-start benchmark: 2026-11-26_23-16-19 ===
+Service: vllm-c
+
+-- Waiting for scale-to-zero --
+Already at 0 pods.
+
+-- Sending COLD request --
+  time_connect:       0.000519s
+  time_starttransfer: 199.383133s   <-- the cold-start number
+  time_total:         199.383193s
+  http_status:        200
+
+-- Sending 3 WARM requests --
+  [1] time_starttransfer: 0.707343s   time_total: 0.707458s   http_status: 200
+  [2] time_starttransfer: 0.708272s   time_total: 0.708326s   http_status: 200
+  [3] time_starttransfer: 0.706915s   time_total: 0.707079s   http_status: 200
+
+-- Evidence from the pod (still alive right now) --
+HF cache size inside the pod:
+
+-- Summary --
+  Cold time_starttransfer: 199.383133s
+  Warm avg (n=3): 0.7075s

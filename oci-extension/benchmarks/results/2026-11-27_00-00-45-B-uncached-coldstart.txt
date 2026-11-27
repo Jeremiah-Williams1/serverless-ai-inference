@@ -1,0 +1,5 @@
+=== B-uncached cold-start benchmark: 2026-11-27_00-00-45 ===
+Service: vllm-b
+
+-- Waiting for scale-to-zero --
+Waiting for scale-to-zero (send no other traffic)...
