@@ -2,3 +2,4 @@ ARG BASE
 FROM ${BASE}
 ARG REV
 RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='facebook/opt-2.7b', revision='${REV}', allow_patterns=['*.json','*.txt','pytorch_model.bin'])"
+
